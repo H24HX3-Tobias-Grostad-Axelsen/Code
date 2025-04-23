@@ -5,15 +5,12 @@ int gridSize = 5;
 int cellSize = 120;
 EnergyCell[][] grid = new EnergyCell[gridSize][gridSize];
 
-boolean køberSolcelle = false;
-boolean køberVindmolle = false;
-boolean køberVandkraft = false;
+String købsValg = "";
 
 void setup() {
   size(1000, 800);
   frameRate(60);
 
-  // Initialiser grid
   for (int i = 0; i < gridSize; i++) {
     for (int j = 0; j < gridSize; j++) {
       grid[i][j] = new EnergyCell(i, j);
@@ -38,9 +35,11 @@ void opdaterSpil() {
   if (co2 >= 1000) {
     textSize(80);
     fill(255, 0, 0);
-    text("Jorden er ødelagt!", width / 2 - 300, height / 2);
+    text("Jorden er ødelagt!", width/2 - 300, height/2);
     noLoop();
   }
+
+  if (co2 < 0) co2 = 0;
 }
 
 void tegnGUI() {
@@ -49,24 +48,23 @@ void tegnGUI() {
   text("CO2-udslip: " + nf(co2, 1, 2), width - 300, 40);
   text("Penge: " + int(penge), 50, 40);
 
-  // Køb-knapper for forskellige energikilder
-  fill(køberSolcelle ? color(255, 200, 200) : color(150, 200, 150));
-  rect(50, height - 100, 200, 60, 10);
-  fill(0);
-  textSize(20);
-  text(køberSolcelle ? "Klik på felt!" : "Køb Solcelle (100 kr)", 60, height - 60);
+  String[] energikilder = {
+    "solcelle", "vindmolle", "vandkraft", "kulkraft", "atomkraft"
+  };
 
-  fill(køberVindmolle ? color(200, 200, 255) : color(150, 200, 255));
-  rect(50, height - 170, 200, 60, 10);
-  fill(0);
-  textSize(20);
-  text(køberVindmolle ? "Klik på felt!" : "Køb Vindmolle (150 kr)", 60, height - 140);
+  for (int i = 0; i < energikilder.length; i++) {
+    fill(købsValg.equals(energikilder[i]) ? color(255, 200, 200) : color(150, 200, 150));
+    rect(50, 100 + i * 70, 200, 50, 10);
+    fill(0);
+    textSize(18);
+    text("Køb " + energikilder[i], 60, 130 + i * 70);
+  }
 
-  fill(køberVandkraft ? color(100, 200, 255) : color(150, 200, 255));
-  rect(50, height - 240, 200, 60, 10);
-  fill(0);
-  textSize(20);
-  text(køberVandkraft ? "Klik på felt!" : "Køb Vandkraft (200 kr)", 60, height - 210);
+  if (!købsValg.equals("")) {
+    fill(0);
+    textSize(16);
+    text("Klik på et felt i griden for at placere din " + købsValg, 50, 500);
+  }
 }
 
 void tegnGrid() {
@@ -78,49 +76,37 @@ void tegnGrid() {
 }
 
 void mousePressed() {
-  // Køb solcelle-knap
-  if (!køberSolcelle && mouseX > 50 && mouseX < 250 && mouseY > height - 100 && mouseY < height - 40) {
-    if (penge >= 100) {
-      køberSolcelle = true;
-    } else {
-      println("Ikke nok penge!");
-    }
-  }
-  // Køb vindmolle-knap
-  else if (!køberVindmolle && mouseX > 50 && mouseX < 250 && mouseY > height - 170 && mouseY < height - 110) {
-    if (penge >= 150) {
-      køberVindmolle = true;
-    } else {
-      println("Ikke nok penge!");
-    }
-  }
-  // Køb vandkraft-knap
-  else if (!køberVandkraft && mouseX > 50 && mouseX < 250 && mouseY > height - 240 && mouseY < height - 180) {
-    if (penge >= 200) {
-      køberVandkraft = true;
-    } else {
-      println("Ikke nok penge!");
+  String[] energikilder = {
+    "solcelle", "vindmolle", "vandkraft", "kulkraft", "atomkraft"
+  };
+  float[] priser = {
+    100, 150, 200, 80, 300
+  };
+
+  for (int i = 0; i < energikilder.length; i++) {
+    if (mouseX > 50 && mouseX < 250 && mouseY > 100 + i * 70 && mouseY < 150 + i * 70) {
+      if (penge >= priser[i]) {
+        købsValg = energikilder[i];
+      } else {
+        println("Ikke nok penge til " + energikilder[i]);
+      }
+      return;
     }
   }
 
-  // Hvis man vil placere en energikilde
-  else if (køberSolcelle || køberVindmolle || køberVandkraft) {
+  if (!købsValg.equals("")) {
     for (int i = 0; i < gridSize; i++) {
       for (int j = 0; j < gridSize; j++) {
         if (grid[i][j].isHovered(mouseX, mouseY) && !grid[i][j].occupied) {
-          if (køberSolcelle) {
-            grid[i][j].place("solcelle");
-            penge -= 100;
-            køberSolcelle = false;
-          } else if (køberVindmolle) {
-            grid[i][j].place("vindmolle");
-            penge -= 150;
-            køberVindmolle = false;
-          } else if (køberVandkraft) {
-            grid[i][j].place("vandkraft");
-            penge -= 200;
-            køberVandkraft = false;
-          }
+          grid[i][j].place(købsValg);
+          float pris = 100;
+          if (købsValg.equals("vindmolle")) pris = 150;
+          if (købsValg.equals("vandkraft")) pris = 200;
+          if (købsValg.equals("kulkraft")) pris = 80;
+          if (købsValg.equals("atomkraft")) pris = 300;
+
+          penge -= pris;
+          købsValg = "";
           return;
         }
       }
@@ -128,7 +114,6 @@ void mousePressed() {
   }
 }
 
-// Klasse til grid-celler
 class EnergyCell {
   int x, y;
   boolean occupied = false;
@@ -147,22 +132,56 @@ class EnergyCell {
 
   void generate() {
     if (occupied) {
-      if (type.equals("solcelle")) {
-        penge += 0.5;
-        co2 += 0.01;
-      } else if (type.equals("vindmolle")) {
-        penge += 1;
-        co2 += 0.05; // CO2 udslip kan ikke være negativt
-      } else if (type.equals("vandkraft")) {
-        penge += 1.5;
-        co2 += 0.1; // CO2 udslip kan ikke være negativt
+      switch (type) {
+        case "solcelle":
+          penge += 0.5;
+          co2 += 0.005;
+          break;
+        case "vindmolle":
+          penge += 1;
+          co2 += 0.002;
+          break;
+        case "vandkraft":
+          penge += 1.5;
+          co2 += 0.001;
+          break;
+        case "kulkraft":
+          penge += 3;
+          co2 += 3;
+          break;
+        case "atomkraft":
+          penge += 4;
+          co2 += 0.05;
+          break;
       }
     }
   }
 
   void display() {
     stroke(0);
-    fill(occupied ? (type.equals("vindmolle") ? color(200, 200, 255) : type.equals("vandkraft") ? color(100, 200, 255) : color(255, 255, 100)) : 240);
+    color farve;
+
+    switch (type) {
+      case "solcelle":
+        farve = color(255, 255, 100);
+        break;
+      case "vindmolle":
+        farve = color(200, 220, 255);
+        break;
+      case "vandkraft":
+        farve = color(100, 200, 255);
+        break;
+      case "kulkraft":
+        farve = color(100, 100, 100);
+        break;
+      case "atomkraft":
+        farve = color(255, 255, 180);
+        break;
+      default:
+        farve = color(240);
+    }
+
+    fill(farve);
     rect(x, y, cellSize - 10, cellSize - 10);
 
     if (occupied) {
