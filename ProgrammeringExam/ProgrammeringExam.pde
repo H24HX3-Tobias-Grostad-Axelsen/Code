@@ -152,10 +152,10 @@ class EnergyCell {
         co2 += 0.01;
       } else if (type.equals("vindmolle")) {
         penge += 1;
-        co2 -= 0.05;
+        co2 += 0.05; // CO2 udslip kan ikke være negativt
       } else if (type.equals("vandkraft")) {
         penge += 1.5;
-        co2 -= 0.1;
+        co2 += 0.1; // CO2 udslip kan ikke være negativt
       }
     }
   }
