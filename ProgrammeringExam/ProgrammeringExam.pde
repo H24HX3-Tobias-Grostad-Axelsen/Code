@@ -1,11 +1,13 @@
 float penge = 100;
 float co2 = 0;
+float skovEffekt = 0;
 
 int gridSize = 5;
 int cellSize = 120;
 EnergyCell[][] grid = new EnergyCell[gridSize][gridSize];
 
 String købsValg = "";
+boolean gameOver = false;
 
 void setup() {
   size(1000, 800);
@@ -20,9 +22,21 @@ void setup() {
 
 void draw() {
   background(227);
-  opdaterSpil();
+
+  if (!gameOver) {
+    opdaterSpil();
+  }
+
   tegnGUI();
   tegnGrid();
+
+  if (gameOver) {
+    fill(255, 0, 0);
+    textSize(80);
+    textAlign(CENTER);
+    text("JORDEN ER ØDELAGT!", width / 2, height / 2);
+    textAlign(LEFT);
+  }
 }
 
 void opdaterSpil() {
@@ -32,14 +46,13 @@ void opdaterSpil() {
     }
   }
 
+  co2 -= skovEffekt;
+  if (co2 < 0) co2 = 0;
+
   if (co2 >= 1000) {
-    textSize(80);
-    fill(255, 0, 0);
-    text("Jorden er ødelagt!", width/2 - 300, height/2);
+    gameOver = true;
     noLoop();
   }
-
-  if (co2 < 0) co2 = 0;
 }
 
 void tegnGUI() {
@@ -52,13 +65,24 @@ void tegnGUI() {
     "solcelle", "vindmolle", "vandkraft", "kulkraft", "atomkraft"
   };
 
+  float[] priser = {
+    100, 150, 200, 80, 300
+  };
+
   for (int i = 0; i < energikilder.length; i++) {
     fill(købsValg.equals(energikilder[i]) ? color(255, 200, 200) : color(150, 200, 150));
     rect(50, 100 + i * 70, 200, 50, 10);
     fill(0);
     textSize(18);
-    text("Køb " + energikilder[i], 60, 130 + i * 70);
+    text("Køb " + energikilder[i] + " (" + int(priser[i]) + " kr)", 60, 130 + i * 70);
   }
+
+  // Knap til at plante skov
+  fill(color(180, 255, 180));
+  rect(50, 100 + energikilder.length * 70, 200, 50, 10);
+  fill(0);
+  textSize(18);
+  text("Plant skov (-CO2) (200 kr)", 60, 130 + energikilder.length * 70);
 
   if (!købsValg.equals("")) {
     fill(0);
@@ -76,6 +100,8 @@ void tegnGrid() {
 }
 
 void mousePressed() {
+  if (gameOver) return;
+
   String[] energikilder = {
     "solcelle", "vindmolle", "vandkraft", "kulkraft", "atomkraft"
   };
@@ -92,6 +118,17 @@ void mousePressed() {
       }
       return;
     }
+  }
+
+  // Klik på skov-knappen
+  if (mouseX > 50 && mouseX < 250 && mouseY > 100 + energikilder.length * 70 && mouseY < 150 + energikilder.length * 70) {
+    if (penge >= 200) {
+      penge -= 200;
+      skovEffekt += 0.5;
+    } else {
+      println("Ikke nok penge til at plante skov");
+    }
+    return;
   }
 
   if (!købsValg.equals("")) {
@@ -147,7 +184,7 @@ class EnergyCell {
           break;
         case "kulkraft":
           penge += 3;
-          co2 += 3;
+          co2 += 0.5;
           break;
         case "atomkraft":
           penge += 4;
