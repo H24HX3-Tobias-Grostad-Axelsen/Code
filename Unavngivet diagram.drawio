@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36" version="26.0.14">
   <diagram name="Side-1" id="D19bgnjukKOtETiOnveb">
-    <mxGraphModel dx="916" dy="569" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1344" dy="835" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -21,6 +21,9 @@
             <mxPoint x="409.5" y="320" as="sourcePoint" />
             <mxPoint x="409.5" y="380" as="targetPoint" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="53bxWELdZm0a32cGgztM-15" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="53bxWELdZm0a32cGgztM-8" target="53bxWELdZm0a32cGgztM-2">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="53bxWELdZm0a32cGgztM-8" value="Er der valgt en energiform eller skov?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="335" y="370" width="150" height="120" as="geometry" />
@@ -49,6 +52,39 @@
         </mxCell>
         <mxCell id="53bxWELdZm0a32cGgztM-13" value="Ja" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="400" y="500" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="53bxWELdZm0a32cGgztM-14" value="Opdater penge og CO2" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="680" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="53bxWELdZm0a32cGgztM-16" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="409.55" y="615" as="sourcePoint" />
+            <mxPoint x="409.55" y="675" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="53bxWELdZm0a32cGgztM-17" value="Er CO2 ≥ 1000?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="520" y="670" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="53bxWELdZm0a32cGgztM-18" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="53bxWELdZm0a32cGgztM-17">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="470" y="710" as="sourcePoint" />
+            <mxPoint x="520" y="660" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="53bxWELdZm0a32cGgztM-19" value="Game over" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="585" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="53bxWELdZm0a32cGgztM-20" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" target="53bxWELdZm0a32cGgztM-19">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="560" y="670" as="sourcePoint" />
+            <mxPoint x="610" y="620" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="53bxWELdZm0a32cGgztM-21" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="560" y="585" as="sourcePoint" />
+            <mxPoint x="560" y="430" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>
